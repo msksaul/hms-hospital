@@ -8,6 +8,8 @@ import {
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar"
 import { CirclePlusIcon } from "lucide-react"
+import { Button } from './ui/button'
+import Link from 'next/link'
 
 export function NavMain({
   items,
@@ -22,16 +24,17 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-            >
-              <CirclePlusIcon
-              />
-              <span>Paciente Nuevo</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <Link href='/new-patient'>
+            <SidebarMenuItem className="flex items-center gap-2">
+              <Button
+                className="w-full bg-primary justify-between text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+              >
+                <span>Paciente Nuevo</span>
+                <CirclePlusIcon
+                />
+              </Button>
+            </SidebarMenuItem>
+          </Link>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
