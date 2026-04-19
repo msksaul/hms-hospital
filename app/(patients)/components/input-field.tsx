@@ -25,7 +25,7 @@ const InputField = ({ label, description }: InputFieldProps) => {
         aria-invalid={isInvalid}
         autoComplete="off"
       />
-      <FieldDescription>{description}</FieldDescription>
+      {description ? <FieldDescription>{description}</FieldDescription> : null}
       {isInvalid && (
         <FieldError errors={field.state.meta.errors} />
       )}

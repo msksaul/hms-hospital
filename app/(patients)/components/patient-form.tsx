@@ -22,7 +22,7 @@ const PatientForm = ({ title, type }: FormProps) => {
   const [openDateCalendar, setOpenDateCalendar] = useState(false)
   const [openFurCalendar, setOpenFurCalendar] = useState(false)
   const [admissionDate, setAdmissionDate] = useState<Date>(new Date())
-  const [furDate, setFurDate] = useState<Date | undefined>(new Date())
+  const [furDate, setFurDate] = useState<Date>(new Date())
 
   const form = useAppForm({
     defaultValues: {
@@ -56,7 +56,9 @@ const PatientForm = ({ title, type }: FormProps) => {
       physical_exam: ''
     },
     validators: {
-      onSubmit: patientSchema,
+      onChange: patientSchema,
+      onChangeAsyncDebounceMs: 3000
+      
     },
     onSubmit: async ({ value }) => {
       console.log(value)
@@ -76,7 +78,7 @@ const PatientForm = ({ title, type }: FormProps) => {
             form.handleSubmit()
           }}
         >
-          <FieldSet>
+          <FieldSet className='pb-4'>
             <FieldLegend>DATOS GENERALES</FieldLegend>
             <FieldGroup>
               <form.AppField name='legal_name'>
@@ -92,19 +94,119 @@ const PatientForm = ({ title, type }: FormProps) => {
                 <form.AppField name='date'>
                   {(field) => <field.CalendarField
                     label='Fecha'
-                    openDateCalendar={openDateCalendar}
-                    setOpenDateCalendar={setOpenDateCalendar}
-                    admissionDate={admissionDate}
-                    setAdmissionDate={setAdmissionDate}
+                    openCalendar={openDateCalendar}
+                    setOpenCalendar={setOpenDateCalendar}
+                    date={admissionDate}
+                    setDate={setAdmissionDate}
                   />}
+                </form.AppField>
+                <form.AppField name='phone'>
+                  {(field) => <field.InputField label='Teléfono' description='Ej. 42425549'/>}
+                </form.AppField>
+              </div>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <form.AppField name='address'>
+                  {(field) => <field.InputField label='Dirección'/>}
+                </form.AppField>
+                <form.AppField name='occupation'>
+                  {(field) => <field.InputField label='Ocupación'/>}
+                </form.AppField>
+              </div>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <form.AppField name='responsible_person'>
+                  {(field) => <field.InputField label='Persona responsable'/>}
+                </form.AppField>
+                <form.AppField name='relationship'>
+                  {(field) => <field.InputField label='Parentesco'/>}
                 </form.AppField>
               </div>
             </FieldGroup>
           </FieldSet>
-          <FieldSet>
+          <FieldSet className='pb-4'>
+            <FieldLegend>SIGNOS VITALES</FieldLegend>
+            <FieldGroup>
+              <div className='grid grid-cols-2 sm:grid-cols-5 gap-4'>
+                <form.AppField name='fc_vital_signs'>
+                  {(field) => <field.InputField label='FC'/>}
+                </form.AppField>
+                <form.AppField name='fr_vital_signs'>
+                  {(field) => <field.InputField label='FR'/>}
+                </form.AppField>
+                <form.AppField name='t_vital_signs'>
+                  {(field) => <field.InputField label='T'/>}
+                </form.AppField>
+                <form.AppField name='p_a_vital_signs'>
+                  {(field) => <field.InputField label='P/A'/>}
+                </form.AppField>
+                <form.AppField name='weight'>
+                  {(field) => <field.InputField label='Peso'/>}
+                </form.AppField>
+                <form.AppField name='height'>
+                  {(field) => <field.InputField label='Talla'/>}
+                </form.AppField>
+                <form.AppField name='sat_vital_signs'>
+                  {(field) => <field.InputField label='SAT'/>}
+                </form.AppField>
+              </div>
+            </FieldGroup>
+          </FieldSet>
+          <FieldSet className='pb-4'>
             <FieldLegend>MOTIVO DE CONSULTA</FieldLegend>
             <form.AppField name='consultation_reason'>
-              {(field) => <field.TextareaField label='Motivo de Consulta' className={'h-20'}/>}
+              {(field) => <field.TextareaField className={'h-20'}/>}
+            </form.AppField>
+          </FieldSet>
+          <FieldSet className='pb-4'>
+            <FieldLegend>HISTORIA DE LA ENFERMEDAD</FieldLegend>
+            <form.AppField name='consultation_reason'>
+              {(field) => <field.TextareaField className={'h-20'}/>}
+            </form.AppField>
+          </FieldSet>
+          <FieldSet className='pb-4'>
+            <FieldLegend>ANTECEDENTES</FieldLegend>
+            <form.AppField name='medical_background'>
+              {(field) => <field.TextareaField label='Médicos' className={'h-10'}/>}
+            </form.AppField>
+            <form.AppField name='surgical_history'>
+              {(field) => <field.TextareaField label='Quirúrgicos' className={'h-10'}/>}
+            </form.AppField>
+            <form.AppField name='traumatic_history'>
+              {(field) => <field.TextareaField label='Traumáticos' className={'h-10'}/>}
+            </form.AppField>
+            <form.AppField name='allergy_history'>
+              {(field) => <field.TextareaField label='Alérgicos' className={'h-10'}/>}
+            </form.AppField>
+          </FieldSet>
+          <FieldSet className='pb-4'>
+            <FieldLegend>GINECO OBSTÉTRICOS</FieldLegend>
+            <div className='grid grid-cols-2 sm:grid-cols-5 gap-4'>
+              <form.AppField name='g_gynecological_obstetric'>
+                {(field) => <field.InputField label='G'/>}
+              </form.AppField>
+              <form.AppField name='p_gynecological_obstetric'>
+                {(field) => <field.InputField label='P'/>}
+              </form.AppField>
+              <form.AppField name='c_gynecological_obstetric'>
+                {(field) => <field.InputField label='C'/>}
+              </form.AppField>
+              <form.AppField name='ab_gynecological_obstetric'>
+                {(field) => <field.InputField label='AB'/>}
+              </form.AppField>
+              <form.AppField name='fur_gynecological_obstetric'>
+                {(field) => <field.CalendarField
+                  label='FUR'
+                  openCalendar={openFurCalendar}
+                  setOpenCalendar={setOpenFurCalendar}
+                  date={furDate}
+                  setDate={setFurDate}
+                />}
+              </form.AppField>
+            </div>
+          </FieldSet>
+          <FieldSet className='pb-4'>
+            <FieldLegend>EXAMEN FÍSICO</FieldLegend>
+            <form.AppField name='physical_exam'>
+              {(field) => <field.TextareaField className={'h-30'}/>}
             </form.AppField>
           </FieldSet>
         </form>

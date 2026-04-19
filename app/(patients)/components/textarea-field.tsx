@@ -4,7 +4,7 @@ import { Updater } from '@tanstack/react-form'
 import { useFieldContext } from '../hooks/use-form'
 
 type TextareaFieldProps = {
-  label: string
+  label?: string
   className: string
 }
 
@@ -16,7 +16,7 @@ const TextareaField = ({ label, className }: TextareaFieldProps) => {
 
   return (
     <Field data-invalid={isInvalid}>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+      {label ? <FieldLabel htmlFor={field.name}>{label}</FieldLabel> : null}
       <Textarea
         id={field.name}
         className={className}
