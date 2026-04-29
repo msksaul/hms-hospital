@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar"
 import { CameraIcon, ChartBarIcon, CircleHelpIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, FileTextIcon, HeartPulseIcon, LayoutDashboardIcon, ListIcon, SearchIcon, Settings2Icon } from "lucide-react"
+import Link from 'next/link'
 
 const data = {
   user: {
@@ -165,7 +166,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
+              render={<Link href="/" />}
             >
               <HeartPulseIcon className="size-7!" />
               <span className="text-base font-semibold">PMS</span>
