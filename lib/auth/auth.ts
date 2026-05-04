@@ -11,9 +11,16 @@ export const auth = betterAuth({
   database: drizzleAdapter(globalDb, {
     provider: "sqlite",
     schema,
+    usePlural: true
   }),
-  emailAndPassword: {
-    enabled: true,
+  emailAndPassword : {
+    enabled: false
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+    }
   },
   plugins: [
     organization({
@@ -30,4 +37,7 @@ export const auth = betterAuth({
       },
     },
   },
+  session: {
+    expiresIn: 60 * 60 * 24 * 30
+  }
 });

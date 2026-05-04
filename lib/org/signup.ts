@@ -1,5 +1,5 @@
 import { globalDb } from "@/db/global/client";
-import { organization, member } from "@/db/global/schema";
+import { organizations, memberships } from "@/db/global/schema";
 import { provisionOrg, createPendingMapping } from "./provision";
 import { nanoid } from "nanoid";
 import type { ProvisionResult } from "@/types";
@@ -18,15 +18,18 @@ export async function onUserCreated(
   const slug = `org-${userId.slice(0, 8)}-${nanoid(6)}`;
   const orgName = `${userName}'s Organization`;
   const now = new Date();
+  const ownerId = userId
 
   // 1. Create the organization
   const [newOrg] = await globalDb
-    .insert(organization)
+    .insert(organizations)
     .values({
       id: nanoid(),
       name: orgName,
       slug,
+      ownerId,
       createdAt: now,
+      updatedAt: now
     })
     .returning();
 
@@ -35,7 +38,7 @@ export async function onUserCreated(
   }
 
   // 2. Add user as owner
-  await globalDb.insert(member).values({
+  await globalDb.insert(memberships).values({
     id: nanoid(),
     organizationId: newOrg.id,
     userId,

@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { globalDb } from "@/db/global/client";
-import { member } from "@/db/global/schema";
+import { memberships } from "@/db/global/schema";
 import { eq, and } from "drizzle-orm";
 import { getPermissionsForRole } from "./permissions";
 import type { Role, Permission, AccessContext } from "@/types";
@@ -10,10 +10,10 @@ import type { Role, Permission, AccessContext } from "@/types";
  */
 export const getMembership = cache(
   async (userId: string, orgId: string) => {
-    const result = await globalDb.query.member.findFirst({
+    const result = await globalDb.query.memberships.findFirst({
       where: and(
-        eq(member.userId, userId),
-        eq(member.organizationId, orgId)
+        eq(memberships.userId, userId),
+        eq(memberships.organizationId, orgId)
       ),
     });
     return result ?? null;
