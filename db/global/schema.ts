@@ -4,36 +4,34 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 // Better Auth Core Tables
 // ──────────────────────────────────────────────
 
-export const user = sqliteTable("user", {
+export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name"),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).notNull(),
+  emailVerified: integer("email_verified", { mode: "boolean" }),
   image: text("image"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 });
 
-export const session = sqliteTable("session", {
-  id: text("id").primaryKey(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-  token: text("token").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
-  ipAddress: text("ip_address"),
-  userAgent: text("user_agent"),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-});
+export const sessions = sqliteTable('sessions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id),
+  token: text('token').notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+})
 
-export const account = sqliteTable("account", {
+export const accounts = sqliteTable("accounts", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -49,7 +47,7 @@ export const account = sqliteTable("account", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 });
 
-export const verification = sqliteTable("verification", {
+export const verifications = sqliteTable("verifications", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
@@ -62,23 +60,25 @@ export const verification = sqliteTable("verification", {
 // Better Auth Organization Plugin Tables
 // ──────────────────────────────────────────────
 
-export const organization = sqliteTable("organization", {
+export const organizations = sqliteTable("organizations", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   logo: text("logo"),
+  ownerId: text('owner_id').notNull().references(() => users.id),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
   metadata: text("metadata"),
 });
 
-export const member = sqliteTable("member", {
+export const memberships = sqliteTable("memberships", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")
     .notNull()
-    .references(() => organization.id, { onDelete: "cascade" }),
+    .references(() => organizations.id, { onDelete: "cascade" }),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   role: text("role").notNull().default("member"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
@@ -87,14 +87,14 @@ export const invitation = sqliteTable("invitation", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")
     .notNull()
-    .references(() => organization.id, { onDelete: "cascade" }),
+    .references(() => organizations.id, { onDelete: "cascade" }),
   email: text("email").notNull(),
   role: text("role"),
   status: text("status").notNull().default("pending"),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   inviterId: text("inviter_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
@@ -106,7 +106,7 @@ export const orgDbMapping = sqliteTable("org_db_mapping", {
   id: text("id").primaryKey(),
   orgId: text("org_id")
     .notNull()
-    .references(() => organization.id, { onDelete: "cascade" })
+    .references(() => organizations.id, { onDelete: "cascade" })
     .unique(),
   dbUrl: text("db_url").notNull(),
   dbAuthToken: text("db_auth_token").notNull(),

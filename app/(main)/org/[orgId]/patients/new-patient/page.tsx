@@ -1,5 +1,5 @@
+import PatientForm from '@/app/(main)/components/patient-form'
 import { Suspense } from 'react'
-import PatientForm from '../components/patient-form'
 
 const NewPatient = () => {
   return (  

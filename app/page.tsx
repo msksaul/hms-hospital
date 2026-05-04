@@ -1,6 +1,9 @@
+import { HeartIcon } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div>Inicio</div>
+    <div>
+      <HeartIcon />
+    </div>
   );
 }

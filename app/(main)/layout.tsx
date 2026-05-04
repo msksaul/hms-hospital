@@ -2,7 +2,7 @@ import { AppSidebar } from '@/shared/components/app-sidebar';
 import { SiteHeader } from '@/shared/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar';
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

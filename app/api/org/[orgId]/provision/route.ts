@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { ensureOrgProvisioned } from "@/lib/org/provision";
 import { globalDb } from "@/db/global/client";
-import { member } from "@/db/global/schema";
+import { memberships } from "@/db/global/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function POST(
@@ -21,10 +21,10 @@ export async function POST(
   }
 
   // 2. Verify membership
-  const membership = await globalDb.query.member.findFirst({
+  const membership = await globalDb.query.memberships.findFirst({
     where: and(
-      eq(member.userId, session.user.id),
-      eq(member.organizationId, orgId)
+      eq(memberships.userId, session.user.id),
+      eq(memberships.organizationId, orgId)
     ),
   });
 

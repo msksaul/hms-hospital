@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { globalDb } from "@/db/global/client";
-import { organization, member } from "@/db/global/schema";
+import { organizations, memberships } from "@/db/global/schema";
 import { createPendingMapping, provisionOrg } from "@/lib/org/provision";
 import { nanoid } from "nanoid";
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   // 3. Check slug uniqueness
-  const existing = await globalDb.query.organization.findFirst({
+  const existing = await globalDb.query.organizations.findFirst({
     where: (org, { eq }) => eq(org.slug, slug),
   });
 
@@ -41,16 +41,19 @@ export async function POST(req: NextRequest) {
   // 4. Create organization
   const orgId = nanoid();
   const now = new Date();
+  const ownerId = session.user.id
 
-  await globalDb.insert(organization).values({
+  await globalDb.insert(organizations).values({
     id: orgId,
     name,
     slug,
+    ownerId,
     createdAt: now,
+    updatedAt: now
   });
 
   // 5. Add user as owner
-  await globalDb.insert(member).values({
+  await globalDb.insert(memberships).values({
     id: nanoid(),
     organizationId: orgId,
     userId: session.user.id,
