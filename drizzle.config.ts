@@ -1,11 +1,17 @@
 import { defineConfig } from "drizzle-kit";
 import "dotenv/config";
 
-const dbUrl = process.env.TURSO_GLOBAL_DB_URL;
-const dbAuthToken = process.env.TURSO_GLOBAL_DB_AUTH_TOKEN;
+const dbUrl = process.env.TURSO_GLOBAL_DB_URL!;
+const dbAuthToken = process.env.TURSO_GLOBAL_DB_AUTH_TOKEN!;
 
 if (!dbUrl) {
   throw new Error("Missing TURSO_GLOBAL_DB_URL in environment.");
+}
+
+if (!dbAuthToken) {
+  throw new Error(
+    "Missing TURSO_GLOBAL_DB_AUTH_TOKEN in environment."
+  );
 }
 
 export default defineConfig({

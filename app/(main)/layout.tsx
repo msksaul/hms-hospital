@@ -1,6 +1,7 @@
 import { AppSidebar } from '@/shared/components/app-sidebar';
 import { SiteHeader } from '@/shared/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar';
+import { Suspense } from 'react';
 
 export default function MainLayout({
   children,
@@ -21,7 +22,9 @@ export default function MainLayout({
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2 p-6">
-            {children}
+            <Suspense fallback={<h1>Loading...</h1>}>
+              {children}
+            </Suspense>
           </div>
         </div>
       </SidebarInset>

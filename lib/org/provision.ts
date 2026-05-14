@@ -21,7 +21,7 @@ async function cloneTemplateDatabase(orgId: string): Promise<{
   dbUrl: string;
   dbAuthToken: string;
 }> {
-  const dbName = `org-${orgId.slice(0, 12)}-${nanoid(4)}`;
+  const dbName = `org-${orgId.slice(0, 12).toLowerCase()}-user`;
 
   // Step 1: Create DB seeded from template
   const createRes = await fetch(

@@ -6,13 +6,13 @@ const dbAuthToken = process.env.TURSO_TEMPLATE_DATABASE_AUTH_TOKEN!
 
 if (!dbUrl) {
   throw new Error(
-    "Missing TURSO_TEMPLATE_DATABASE_URL (or TURSO_GLOBAL_DB_URL fallback) in environment."
+    "Missing TURSO_TEMPLATE_DATABASE_URL in environment."
   );
 }
 
 if (!dbAuthToken) {
   throw new Error(
-    "Missing TURSO_TEMPLATE_DATABASE_AUTH_TOKEN (or TURSO_GLOBAL_DB_AUTH_TOKEN fallback) in environment."
+    "Missing TURSO_TEMPLATE_DATABASE_AUTH_TOKEN in environment."
   );
 }
 
