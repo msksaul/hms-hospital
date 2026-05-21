@@ -1,7 +1,13 @@
-import { AppSidebar } from '@/shared/components/app-sidebar';
-import { SiteHeader } from '@/shared/components/site-header';
-import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar';
+import SpinnerCircle4 from '@/shared/components/customized/spinner/spinner-10';
 import { Suspense } from 'react';
+
+const SpinnerContainer = () => {
+  return (
+    <div className='flex h-screen items-center justify-center'>
+      <SpinnerCircle4 />
+    </div>
+  )
+}
 
 export default function MainLayout({
   children,
@@ -9,25 +15,8 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant='inset'/>
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2 p-6">
-            <Suspense fallback={<h1>Loading...</h1>}>
-              {children}
-            </Suspense>
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <Suspense fallback={<SpinnerContainer />}>
+      {children}
+    </Suspense>
   )
 }

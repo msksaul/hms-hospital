@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { globalDb } from "@/db/global/client";
-import { memberships } from "@/db/global/schema";
+import { memberships, organizations } from "@/db/global/schema";
 import { eq, and } from "drizzle-orm";
 import { getPermissionsForRole } from "./permissions";
 import type { Role, Permission, AccessContext } from "@/types";
@@ -14,6 +14,17 @@ export const getMembership = cache(
       where: and(
         eq(memberships.userId, userId),
         eq(memberships.organizationId, orgId)
+      ),
+    });
+    return result ?? null;
+  }
+);
+
+export const getOrgData = cache(
+  async (orgId: string) => {
+    const result = await globalDb.query.organizations.findFirst({
+      where: (
+        eq(organizations.id, orgId)
       ),
     });
     return result ?? null;
@@ -41,6 +52,9 @@ export const getAccessContext = cache(
     const membership = await getMembership(userId, orgId);
     if (!membership) return null;
 
+    const organization = await getOrgData(orgId)
+    if(!organization) return null
+
     const role = membership.role as Role;
     const permissions = getPermissionsForRole(role);
 
@@ -49,6 +63,7 @@ export const getAccessContext = cache(
         id: membership.id,
         userId: membership.userId,
         organizationId: membership.organizationId,
+        organizationName: organization.name,
         role,
         createdAt: membership.createdAt,
       },

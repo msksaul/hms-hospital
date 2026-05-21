@@ -7,9 +7,16 @@ import type { AccessContext } from "@/types";
  * Require that the current user is a member of the given org.
  * Returns AccessContext if they are.
  */
+type Session = NonNullable<
+  Awaited<ReturnType<typeof getSessionCached>>
+>;
+
 export async function requireMembership(
   orgId: string
-): Promise<AccessContext> {
+): Promise<{
+  access: AccessContext;
+  user: Session['user']
+}> {
   const session = await getSessionCached();
 
   if (!session) {
@@ -22,5 +29,5 @@ export async function requireMembership(
     redirect("/");
   }
 
-  return access;
+  return { access, user: session.user };
 }

@@ -11,6 +11,7 @@ export interface AccessContext {
     id: string;
     userId: string;
     organizationId: string;
+    organizationName: string;
     role: Role;
     createdAt: Date;
   };

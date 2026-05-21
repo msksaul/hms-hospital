@@ -15,6 +15,16 @@ import {
 } from "@/shared/components/ui/sidebar"
 import { CameraIcon, ChartBarIcon, CircleHelpIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, FileTextIcon, HeartPulseIcon, LayoutDashboardIcon, ListIcon, SearchIcon, Settings2Icon } from "lucide-react"
 import Link from 'next/link'
+import { getSessionCached } from '@/lib/auth/session'
+
+type Session = NonNullable<
+  Awaited<ReturnType<typeof getSessionCached>>
+>;
+
+type AppSidebarProps =
+  React.ComponentProps<typeof Sidebar> & {
+    user: Session["user"];
+  };
 
 const data = {
   user: {
@@ -158,7 +168,7 @@ const data = {
     },
   ],
 }
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -180,7 +190,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )
